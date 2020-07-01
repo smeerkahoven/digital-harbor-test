@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -76,7 +77,7 @@ public class NotaController {
 	 * @param request
 	 * @return
 	 */
-	@PutMapping
+	@PostMapping("/update")
 	public NotaResponse update(@RequestHeader(name ="publicId",required =true) String publicId ,
 			@RequestBody final NotaRequest request) {
 		NotaResponse response = new NotaResponse();
@@ -106,7 +107,7 @@ public class NotaController {
 		return response;
 	}
 
-	@DeleteMapping
+	@PostMapping("/delete")
 	public NotaResponse delete(@RequestBody  NotaRequest request) {
 		NotaResponse response = new NotaResponse();
 

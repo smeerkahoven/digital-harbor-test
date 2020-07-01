@@ -10,6 +10,7 @@ public class SecurityConstants {
 	public static final String SIGN_UP_URL = "/login" ;
 	public static final String TOKEN_SECRET = "d1g1t4lh4rb0r";
 	
+	
 	public static String  getTokenSecret() {
 		AppProperties appProperties = (AppProperties)SpringApplicationContext.getBean("AppProperties") ;
 		

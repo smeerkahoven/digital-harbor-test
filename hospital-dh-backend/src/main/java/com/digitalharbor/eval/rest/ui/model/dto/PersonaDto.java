@@ -22,5 +22,7 @@ public abstract class PersonaDto extends DefaultDto implements Serializable {
 	private byte[] fotoPerfil ;
 	private String fechaCreacion ;
 	private String fechaActualizacion ;
+	
+	private HospitalDto hospital ;
 
 }

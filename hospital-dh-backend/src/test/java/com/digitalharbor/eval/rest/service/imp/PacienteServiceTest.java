@@ -13,6 +13,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import com.digitalharbor.eval.rest.exception.HospitalException;
 import com.digitalharbor.eval.rest.service.IPacienteService;
+import com.digitalharbor.eval.rest.ui.model.dto.HospitalDto;
 import com.digitalharbor.eval.rest.ui.model.dto.PacienteDto;
 import com.digitalharbor.eval.rest.ui.model.dto.UsuarioDto;
 
@@ -23,7 +24,7 @@ class PacienteServiceTest {
 	@Autowired
 	private IPacienteService<PacienteDto> service;
 
-	// @Test
+	@Test
 	void testCreate() {
 
 		PacienteDto dto = new PacienteDto();
@@ -32,7 +33,12 @@ class PacienteServiceTest {
 		dto.setDireccion("Av Heroes del Chaco");
 		dto.setFechaNacimiento("10/09/1984");
 		dto.setNombre("Jose");
-		dto.setPublicId("G1mm5Tnjs6hKz47l");
+		dto.setPublicId(StaticValues.PUBLIC_ID);
+		
+		HospitalDto h = new HospitalDto();
+		h.setId(1);
+		
+		dto.setHospital(h);
 
 		try {
 
@@ -43,6 +49,45 @@ class PacienteServiceTest {
 		} catch (HospitalException e) {
 			e.printStackTrace();
 		}
+		
+		
+		dto = new PacienteDto();
+
+		dto.setApellido("Callau");
+		dto.setDireccion("Av Centinela");
+		dto.setFechaNacimiento("15/07/1980");
+		dto.setNombre("Lucas");
+		dto.setPublicId(StaticValues.PUBLIC_ID);
+		
+		h = new HospitalDto();
+		h.setId(2);
+		
+		dto.setHospital(h);
+
+		try {
+
+			PacienteDto response = service.create(dto);
+
+			assertThat(response).isNotNull();
+
+		} catch (HospitalException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	@Test
+	void testFindByHospital() {
+		
+		try {
+
+			List<PacienteDto> response = service.getByHospital(1);
+
+			assertThat(response).isNotEmpty();
+
+		} catch (HospitalException e) {
+			e.printStackTrace();
+		}
+		
 	}
 
 	@Test

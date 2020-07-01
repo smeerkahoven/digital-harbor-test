@@ -19,5 +19,6 @@ public class NotaDto extends DefaultDto implements Serializable {
 	private String descripcion ;
 	private PacienteDto idPaciente ;
 	private DoctorDto idDoctor ;
+	private String fechaCreacion ;
 
 }

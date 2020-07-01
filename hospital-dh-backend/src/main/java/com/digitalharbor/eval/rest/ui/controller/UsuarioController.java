@@ -8,6 +8,7 @@ package com.digitalharbor.eval.rest.ui.controller;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -26,7 +27,7 @@ import com.digitalharbor.eval.rest.ui.model.response.UsuarioResponse;
  */
 
 @RestController
-@RequestMapping("usuarios")
+@RequestMapping("usuario")
 public class UsuarioController {
     
 	@Autowired

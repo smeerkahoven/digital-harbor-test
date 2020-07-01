@@ -1,0 +1,51 @@
+<div class="container">
+    <div class="row">
+        <div class="col">
+            <div class="card" class="mx-auto inicio-sesion">
+                <div class="card-body">
+                    <h5 class="card-title">Inicio de Sesion</h5>
+                    <p *ngIf="errors?.length">
+                        <ngb-alert type="danger" *ngFor="let error of errors">{{error}}</ngb-alert>
+                    </p>
+                    
+                    <form (ngSubmit)="login()" #form="ngForm">
+                        <div class="form-group col">
+                            <label class=" col-form-label" for="username">Usuario</label>
+                            <div class="">
+                                <input name="usuario" 
+                                    class="form-control" 
+                                    type="text"
+                                    [(ngModel)]="data.username"
+                                    placeholder="Usuario"
+                                    required
+                                    />
+                            </div>
+                        </div>
+                        <div class="form-group col ">
+                            <label class="col-form-label" for="username">Password</label>
+                            <div class="">
+                                <input 
+                                name="password" 
+                                class="form-control"
+                                [(ngModel)]="data.password"
+                                    placeholder="Password"
+                                    required 
+                                    type="password" />
+                            </div>
+                        </div>
+    
+                        <div class="form-group col">
+                            <button type="submit" 
+                                class="btn btn-primary col"
+                                [disabled]="submitted || !form.valid"
+                                >Iniciar sesion</button>
+                        </div>
+                    </form>
+                    
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+</div>

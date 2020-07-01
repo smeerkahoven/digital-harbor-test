@@ -14,14 +14,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.digitalharbor.eval.rest.entity.DoctorEntity;
+import com.digitalharbor.eval.rest.entity.HospitalEntity;
 import com.digitalharbor.eval.rest.entity.PacienteEntity;
 import com.digitalharbor.eval.rest.entity.UsuarioEntity;
 import com.digitalharbor.eval.rest.exception.HospitalException;
+import com.digitalharbor.eval.rest.repository.HospitalRepository;
 import com.digitalharbor.eval.rest.repository.PacienteRepository;
 import com.digitalharbor.eval.rest.repository.UsuarioRepository;
 import com.digitalharbor.eval.rest.service.IPacienteService;
 import com.digitalharbor.eval.rest.ui.model.dto.DoctorDto;
 import com.digitalharbor.eval.rest.ui.model.dto.EspecialidadDto;
+import com.digitalharbor.eval.rest.ui.model.dto.HospitalDto;
 import com.digitalharbor.eval.rest.ui.model.dto.PacienteDto;
 import com.digitalharbor.eval.rest.util.DateUtils;
 import com.digitalharbor.eval.rest.util.ExceptionMessages;
@@ -37,21 +40,29 @@ public class PacienteService implements IPacienteService<PacienteDto> {
 
 	@Autowired
 	private UsuarioRepository usuarioRepository;
+	
+	@Autowired
+	private HospitalRepository hospitalRepository ;
 
 	@Override
-	public PacienteDto create(PacienteDto paciente) throws HospitalException {
+	public PacienteDto create(PacienteDto dto) throws HospitalException {
 
-		if (isValid(paciente)) {
+		if (isValid(dto)) {
 			PacienteEntity entity = new PacienteEntity();
-			BeanUtils.copyProperties(paciente, entity);
+			BeanUtils.copyProperties(dto, entity);
 
-			entity.setFechaNacimiento(DateUtils.convert(paciente.getFechaNacimiento()));
+			entity.setFechaNacimiento(DateUtils.convert(dto.getFechaNacimiento()));
 			entity.setFechaCreacion(DateUtils.currentDate());
 
 			//
-			entity.setCreadoPor(usuarioRepository.findByPublicId(paciente.getPublicId()));
+			entity.setCreadoPor(usuarioRepository.findByPublicId(dto.getPublicId()));
 			//
 
+			HospitalEntity hospitalId = new HospitalEntity();
+			hospitalId.setId(dto.getHospital().getId());
+			
+			entity.setHospitalId(hospitalId);
+			
 			PacienteEntity response = repository.save(entity);
 
 			Optional<PacienteEntity> op = Optional.ofNullable(response);
@@ -169,6 +180,7 @@ public class PacienteService implements IPacienteService<PacienteDto> {
 
 		PacienteDto response = new PacienteDto();
 		BeanUtils.copyProperties(fromDb.get(), response);
+		response.setFechaCreacion(DateUtils.convert(fromDb.get().getFechaCreacion()));
 
 		ArrayList<PacienteDto> items = new ArrayList<>();
 		items.add(response);
@@ -187,6 +199,7 @@ public class PacienteService implements IPacienteService<PacienteDto> {
 			PacienteDto toResponse = new PacienteDto();
 			BeanUtils.copyProperties(e, toResponse);
 			toResponse.setFechaNacimiento(DateUtils.convert(e.getFechaNacimiento()));
+			toResponse.setFechaCreacion(DateUtils.convert(e.getFechaCreacion()));
 			response.add(toResponse);
 		});
 
@@ -258,11 +271,54 @@ public class PacienteService implements IPacienteService<PacienteDto> {
 			fromBd.setFotoPerfil(e.getFotoPerfil());
 			fromBd.setId(e.getId());
 			fromBd.setNombre(e.getNombre());
+			
+			HospitalDto hospital = new HospitalDto();
+			hospital.setId(e.getHospitalId().getId());
+			hospital.setNombre(e.getNombre());
+			
+			fromBd.setHospital(hospital);
 
 			responseList.add(fromBd);
 		});
 		
 		return responseList;
 	}
+	
+	
+	@Override
+	public List<PacienteDto> getByHospital(Integer id) throws HospitalException {
+
+		Optional<Integer> idValid = Optional.ofNullable(id);
+
+		if (!idValid.isPresent()) {
+			throw new HospitalException(ExceptionMessages.MSG_INGRESE_ID_VALIDO);
+		}
+		
+		HospitalEntity hospital = new HospitalEntity();
+		hospital.setId(id);
+
+		List<PacienteEntity> fromDb = repository.findByHospitalId(hospital);
+
+		List<PacienteDto> response = new ArrayList<>();
+
+		fromDb.forEach(e -> {
+			PacienteDto toResponse = new PacienteDto();
+			BeanUtils.copyProperties(e, toResponse);
+			toResponse.setFechaNacimiento(DateUtils.convert(e.getFechaNacimiento()));
+			toResponse.setFechaCreacion(DateUtils.convert(e.getFechaCreacion()));
+			
+			HospitalDto h = new HospitalDto();
+			h.setId(e.getHospitalId().getId());
+			h.setNombre(e.getHospitalId().getNombre());
+			
+			toResponse.setHospital(h);
+			
+			response.add(toResponse);
+		});
+		
+		
+		return response;
+	}
+
 
 }

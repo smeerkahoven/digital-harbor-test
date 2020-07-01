@@ -66,6 +66,9 @@ public class DoctorEntity {
     @JoinColumn(name="actualizado_por")
 	private UsuarioEntity actualizadoPor ;
 
+	@ManyToOne
+    @JoinColumn(name="hospital_id")
+	private HospitalEntity hospitalId;
 	
 	@ManyToMany
 	@JoinTable(

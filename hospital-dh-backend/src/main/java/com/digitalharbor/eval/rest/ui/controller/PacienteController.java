@@ -6,6 +6,7 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Required;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -79,7 +80,7 @@ public class PacienteController {
 	 * @param request
 	 * @return
 	 */
-	@PutMapping
+	@PostMapping("/update")
 	public PacienteResponse update(@RequestHeader(name ="publicId",required =true) String publicId ,
 			@RequestBody final PersonaRequest request) {
 		PacienteResponse response = new PacienteResponse();
@@ -109,7 +110,7 @@ public class PacienteController {
 		return response;
 	}
 
-	@DeleteMapping
+	@PostMapping("/delete")
 	public PacienteResponse delete(@RequestBody final PersonaRequest request) {
 		PacienteResponse response = new PacienteResponse();
 
@@ -139,6 +140,35 @@ public class PacienteController {
 		try {
 
 			List<PacienteDto> list  = service.get(id);
+
+			if (list.isEmpty() ) {
+				response.setCodigo(ModelResponse.RESPONSE_WARNING);
+				response.setMensaje(ModelResponse.MSG_LISTA_VACIA);
+			}else {
+				response.setItems(list);
+				response.setCodigo(ModelResponse.RESPONSE_OK);
+			}
+
+		} catch (HospitalException e) {
+			response.setCodigo(ModelResponse.RESPONSE_ERROR);
+			response.setMensaje(e.getMessage());
+			e.printStackTrace();
+
+		} catch (Exception e) {
+			response.setCodigo(ModelResponse.RESPONSE_ERROR);
+			response.setMensaje(ModelResponse.MSG_ERROR_EN_EL_SERVER);
+			e.printStackTrace();
+		}
+		return response;
+	}
+	
+	@GetMapping("hospital/{id}")
+	public PacienteResponse getByHospital(@PathVariable(value = "id") Integer id) {
+		PacienteResponse response = new PacienteResponse();
+
+		try {
+
+			List<PacienteDto> list  = service.getByHospital(id);
 
 			if (list.isEmpty() ) {
 				response.setCodigo(ModelResponse.RESPONSE_WARNING);

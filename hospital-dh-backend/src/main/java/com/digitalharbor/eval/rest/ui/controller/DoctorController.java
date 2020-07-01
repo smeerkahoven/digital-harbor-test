@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -80,7 +81,7 @@ public class DoctorController {
 	 * @param request
 	 * @return
 	 */
-	@PutMapping
+	@PostMapping("/update")
 	public DoctorResponse update(@RequestHeader(name ="publicId",required =true) String publicId ,
 			@RequestBody final DoctorRequest request) {
 		DoctorResponse response = new DoctorResponse();
@@ -110,7 +111,7 @@ public class DoctorController {
 		return response;
 	}
 
-	@DeleteMapping
+	@PostMapping("/delete")
 	public DoctorResponse delete(@RequestBody final DoctorRequest request) {
 		DoctorResponse response = new DoctorResponse();
 
@@ -140,6 +141,36 @@ public class DoctorController {
 		try {
 
 			List<DoctorDto> list  = service.get(id);
+
+			if (list.isEmpty() ) {
+				response.setCodigo(ModelResponse.RESPONSE_WARNING);
+				response.setMensaje(ModelResponse.MSG_LISTA_VACIA);
+			}else {
+				response.setItems(list);
+				response.setCodigo(ModelResponse.RESPONSE_OK);
+			}
+
+		} catch (HospitalException e) {
+			response.setCodigo(ModelResponse.RESPONSE_ERROR);
+			response.setMensaje(e.getMessage());
+			e.printStackTrace();
+
+		} catch (Exception e) {
+			response.setCodigo(ModelResponse.RESPONSE_ERROR);
+			response.setMensaje(ModelResponse.MSG_ERROR_EN_EL_SERVER);
+			e.printStackTrace();
+		}
+		return response;
+	}
+	
+	
+	@GetMapping("hospital/{id}")
+	public DoctorResponse getByHospital(@PathVariable(value = "id") Integer id) {
+		DoctorResponse response = new DoctorResponse();
+
+		try {
+
+			List<DoctorDto> list  = service.getByHospital(id);
 
 			if (list.isEmpty() ) {
 				response.setCodigo(ModelResponse.RESPONSE_WARNING);

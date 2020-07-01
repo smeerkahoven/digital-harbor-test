@@ -1,0 +1,49 @@
+<div class="card">
+    <div class="card-body">
+      <h5 class="card-title">Especialidades</h5>
+      <div class="btn-group" role="group" aria-label="Basic example">
+        <button type="button" class="btn btn-primary"  (click)="nuevo()" >Nuevo</button>
+      </div>
+  
+      <table class="table table-striped">
+        <thead>
+          <tr>
+            <th scope="col">#</th>
+            <th scope="col">Nombre</th>
+            <th scope="col">Descripci&oacute;n</th>
+            <th scope="col">Fecha Creaci&oacute;n</th>
+            <th scope="col" ></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let especilidad of tableData">
+            <th scope="row">{{ especilidad.id }}</th>
+            <td>{{ especilidad.nombre }}</td>
+            <td>{{ especilidad.descripcion }}</td>
+            <td>{{ especilidad.fechaCreacion }}</td>
+            <td>
+            <div class="btn-group" role="group" aria-label="Basic example">
+              <button title="Editar" class="btn btn-info btn-sm" (click)="edit(especilidad)"><i class="fa fa-pen fa-lg"></i></button>
+              <a title="Cargar" [routerLink]="['/especilidad', especilidad.id]" class="btn btn-warning btn-sm" ><i class="fa fa-eye fa-lg"></i></a>
+              <button title="Eliminar" class="btn btn-danger btn-sm" (click)="eliminar(especilidad)"><i class="fa fa-trash fa-lg"></i></button>
+            </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+  
+       <div class="d-flex justify-content-between p-2">
+        <ngb-pagination [collectionSize]="collectionSize" [(page)]="page" [pageSize]="pageSize">
+        </ngb-pagination>
+  
+        <select class="custom-select" style="width: auto" [(ngModel)]="pageSize">
+          <option [ngValue]="2">2 items per page</option>
+          <option [ngValue]="4">4 items per page</option>
+          <option [ngValue]="6">6 items per page</option>
+        </select>
+      </div> 
+  
+    </div>
+  </div>
+  
+  

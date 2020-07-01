@@ -16,6 +16,8 @@ public class DoctorDto extends PersonaDto implements Serializable {
 	
 	private static final long serialVersionUID = 1L;
 	
+	private HospitalDto hospital ;
+	
 	private List<EspecialidadDto> especialidades ;
 
 }

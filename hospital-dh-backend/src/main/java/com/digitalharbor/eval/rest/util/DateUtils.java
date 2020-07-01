@@ -3,7 +3,6 @@ package com.digitalharbor.eval.rest.util;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Date;
 
 /**
@@ -13,8 +12,8 @@ import java.util.Date;
  */
 public class DateUtils {
 	
-	public static final String DATE_FORMAT = "MM/dd/yyyy" ;
-	public static final String DATETIME_FORMAT = "MM/dd/yyyy HH:mm:ss" ;
+	public static final String DATE_FORMAT = "mm/dd/yyyy" ;
+	public static final String DATETIME_FORMAT = "mm/dd/yyyy HH:mm:ss" ;
 	
 	/**
 	 * Valida el formato de fecha

@@ -13,9 +13,6 @@ import lombok.Setter;
 @JsonInclude(Include.NON_NULL)
 public class EspecialidadDto extends DefaultDto implements Serializable {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 	
 	private Integer id;
@@ -23,5 +20,6 @@ public class EspecialidadDto extends DefaultDto implements Serializable {
 	private String descripcion ;
 	private byte[] avatar ;
 	private String fechaCreacion ;
+	private HospitalDto hospital ;
 
 }

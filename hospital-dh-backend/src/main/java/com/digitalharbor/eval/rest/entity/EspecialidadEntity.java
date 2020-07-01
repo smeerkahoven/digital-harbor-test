@@ -15,6 +15,8 @@ import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import lombok.Getter;
 import lombok.Setter;
 
@@ -56,8 +58,14 @@ public class EspecialidadEntity implements Serializable{
 	@ManyToOne
     @JoinColumn(name="actualizado_por")
 	private UsuarioEntity actualizadoPor ;
-
 	
+	@JsonIgnore
+	@ManyToOne
+    @JoinColumn(name="hospital_id")
+	private HospitalEntity hospitalId;
+
+
+	@JsonIgnore
 	@ManyToMany
 	Set<DoctorEntity> doctores ;
 	

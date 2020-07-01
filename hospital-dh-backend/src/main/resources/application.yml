@@ -1,13 +1,9 @@
 spring:
   datasource:
     url: "jdbc:mysql://localhost:3306/digitalharbor_hospital?serverTimezone=UTC"
-    testWhileIdle : "true"
-    timeBetweenEvictionRunsMillis : "60000"
-    validationQuery : "SELECT 1"
     username: "digitalharbor"
     password: "digitalharbor"
   servlet:
-    session:
       timeout: 5s
   jpa:
     #hibernate.ddl-auto: create
@@ -15,3 +11,8 @@ spring:
     show-sql: true 
 
 token : "d1g1t4lh4rb0r"
+
+server:
+  servlet:
+    context-path: /hospital-dh-backend
+  port: 8081

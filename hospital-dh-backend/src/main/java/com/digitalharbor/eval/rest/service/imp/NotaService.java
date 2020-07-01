@@ -151,6 +151,8 @@ public class NotaService implements INotaService<NotaDto> {
 
 		NotaDto response = new NotaDto();
 		BeanUtils.copyProperties(fromDb.get(), response);
+		
+		response.setFechaCreacion(DateUtils.convert(fromDb.get().getFechaCreacion()));
 
 		ArrayList<NotaDto> items = new ArrayList<>();
 		items.add(response);
@@ -170,6 +172,7 @@ public class NotaService implements INotaService<NotaDto> {
 			BeanUtils.copyProperties(e, toResponse);
 			
 			toResponse.setFechaAtencion(DateUtils.convert(e.getFechaAtencion()));
+			toResponse.setFechaCreacion(DateUtils.convert(e.getFechaCreacion()));
 			
 			response.add(toResponse);
 		});

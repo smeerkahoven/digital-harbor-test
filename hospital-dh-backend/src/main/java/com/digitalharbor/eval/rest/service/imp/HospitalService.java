@@ -121,6 +121,8 @@ public class HospitalService implements IHospitalService<HospitalDto> {
 
 		HospitalDto response = new HospitalDto();
 		BeanUtils.copyProperties(fromDb.get(), response);
+		
+		response.setFechaCreacion(DateUtils.convert(fromDb.get().getFechaCreacion()));
 
 		ArrayList<HospitalDto> items = new ArrayList<>();
 		items.add(response);
@@ -137,6 +139,8 @@ public class HospitalService implements IHospitalService<HospitalDto> {
 		fromDb.forEach(e -> {
 			HospitalDto toResponse = new HospitalDto();
 			BeanUtils.copyProperties(e, toResponse);
+			toResponse.setFechaCreacion(DateUtils.convert(e.getFechaCreacion()));
+			
 			response.add(toResponse);
 		});
 

@@ -16,6 +16,7 @@ import com.digitalharbor.eval.rest.exception.HospitalException;
 import com.digitalharbor.eval.rest.service.IDoctorService;
 import com.digitalharbor.eval.rest.ui.model.dto.DoctorDto;
 import com.digitalharbor.eval.rest.ui.model.dto.EspecialidadDto;
+import com.digitalharbor.eval.rest.ui.model.dto.HospitalDto;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -27,21 +28,62 @@ class DoctorServiceTest {
 	@Test
 	void test() {
 
-		EspecialidadDto esdto = new EspecialidadDto();
-		esdto.setId(2);
 		
 		DoctorDto dto = new DoctorDto();
 		dto.setApellido("Coronado");
 		dto.setNombre("Jose");
 		dto.setDireccion("Av. Pirai");
 		dto.setFechaNacimiento("10/09/1980");
-		dto.setPublicId("G1mm5Tnjs6hKz47l");
+		dto.setPublicId(StaticValues.PUBLIC_ID);
+		
+		HospitalDto h = new HospitalDto();
+		h.setId(2);
+		
+		dto.setHospital(h);
+		
+		EspecialidadDto esdto = new EspecialidadDto();
+		esdto.setId(5);
+		
+		EspecialidadDto esdto2 = new EspecialidadDto();
+		esdto2.setId(6);
 		
 		List<EspecialidadDto> l = new ArrayList<EspecialidadDto>();
 		l.add(esdto);
+		l.add(esdto2);
+		
 		dto.setEspecialidades(l);
 		
 		DoctorDto response;
+		try {
+			response = service.create(dto);
+			
+			assertThat(response).isNotNull();
+		} catch (HospitalException e) {
+			e.printStackTrace();
+		}
+		
+		/////////
+		
+		esdto = new EspecialidadDto();
+		esdto.setId(1);
+		
+		dto = new DoctorDto();
+		dto.setApellido("Pereira");
+		dto.setNombre("Franco");
+		dto.setDireccion("Calle La Salle");
+		dto.setFechaNacimiento("07/08/1975");
+		dto.setPublicId(StaticValues.PUBLIC_ID);
+		
+		h = new HospitalDto();
+		h.setId(5);
+		
+		dto.setHospital(h);
+		
+		
+		l = new ArrayList<EspecialidadDto>();
+		l.add(esdto);
+		dto.setEspecialidades(l);
+		
 		try {
 			response = service.create(dto);
 			
@@ -54,7 +96,7 @@ class DoctorServiceTest {
 	
 	
 	
-	@Test
+	//@Test
 	void testSearchByName() {
 
 		DoctorDto dto = new DoctorDto();
@@ -65,7 +107,7 @@ class DoctorServiceTest {
 		 * dto.setFechaNacimiento("01/01/2010");
 		 */
 		dto.setNombre("Juan");
-		dto.setPublicId("G1mm5Tnjs6hKz47l");
+		dto.setPublicId(StaticValues.PUBLIC_ID);
 
 		try {
 
@@ -78,7 +120,7 @@ class DoctorServiceTest {
 		}
 	}
 
-	@Test
+	//@Test
 	void testSearchByFechaNac() {
 
 		DoctorDto dto = new DoctorDto();
@@ -89,7 +131,7 @@ class DoctorServiceTest {
 		 * dto.setFechaNacimiento("01/01/2010");
 		 */
 		// dto.setNombre("Marcelo");
-		dto.setPublicId("G1mm5Tnjs6hKz47l");
+		dto.setPublicId(StaticValues.PUBLIC_ID);
 		dto.setFechaNacimiento("10/10/1960");
 
 		try {
@@ -103,7 +145,7 @@ class DoctorServiceTest {
 		}
 	}
 
-	@Test
+	//@Test
 	void testSearchByFechaApellido() {
 
 		DoctorDto dto = new DoctorDto();
@@ -114,7 +156,7 @@ class DoctorServiceTest {
 		 * dto.setFechaNacimiento("01/01/2010");
 		 */
 		// dto.setNombre("Marcelo");
-		dto.setPublicId("G1mm5Tnjs6hKz47l");
+		dto.setPublicId(StaticValues.PUBLIC_ID);
 		dto.setApellido("Maldonado");
 		dto.setFechaNacimiento("01/01/2010");
 
