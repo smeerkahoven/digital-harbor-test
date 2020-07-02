@@ -219,7 +219,7 @@ public class PacienteService implements IPacienteService<PacienteDto> {
 
 		if (dto.getFechaNacimiento() != null) {
 			if(DateUtils.esFechaValida(dto.getFechaNacimiento())) {
-				query += " h.fecha_nacimiento=:fechaNacimiento AND ";
+				query += " date_format(h.fecha_nacimiento,'%m/%d/%Y')=:fechaNacimiento AND ";
 			}
 		}
 
@@ -241,7 +241,7 @@ public class PacienteService implements IPacienteService<PacienteDto> {
 		
 		if (dto.getFechaNacimiento() != null) {
 			if(DateUtils.esFechaValida(dto.getFechaNacimiento())) {
-				q.setParameter("fechaNacimiento", DateUtils.convert(dto.getFechaNacimiento()));
+				q.setParameter("fechaNacimiento",dto.getFechaNacimiento());
 			}
 		}
 

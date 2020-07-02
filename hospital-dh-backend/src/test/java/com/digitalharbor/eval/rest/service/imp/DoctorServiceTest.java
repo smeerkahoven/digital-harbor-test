@@ -25,7 +25,7 @@ class DoctorServiceTest {
 	@Autowired
 	private IDoctorService<DoctorDto> service ;
 	
-	@Test
+	//@Test
 	void test() {
 
 		
@@ -96,7 +96,7 @@ class DoctorServiceTest {
 	
 	
 	
-	//@Test
+	@Test
 	void testSearchByName() {
 
 		DoctorDto dto = new DoctorDto();

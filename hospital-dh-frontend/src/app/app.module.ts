@@ -21,6 +21,11 @@ import { MenuOpcionesComponent } from './components/menu-opciones/menu-opciones.
 import { HospitalService } from './services/hospital.service';
 import { PacientesFormComponent } from './components/pacientes/pacientes-form/pacientes-form.component';
 import { EspecialidadFormComponent } from './components/especialidad/especialidad-form/especialidad-form.component';
+import { HospitalBuscarComponent } from './components/hospital/hospital-buscar/hospital-buscar.component';
+import { PacientesBuscarComponent } from './components/pacientes/pacientes-buscar/pacientes-buscar.component';
+import { DoctoresFormComponent } from './components/doctores/doctores-form/doctores-form.component';
+import { DoctoresBuscarComponent } from './components/doctores/doctores-buscar/doctores-buscar.component';
+import { DoctoresFormEditComponent } from './components/doctores/doctores-form-edit/doctores-form-edit.component';
 
 @NgModule({
   declarations: [
@@ -37,6 +42,11 @@ import { EspecialidadFormComponent } from './components/especialidad/especialida
     MenuOpcionesComponent,
     PacientesFormComponent,
     EspecialidadFormComponent,
+    HospitalBuscarComponent,
+    PacientesBuscarComponent,
+    DoctoresFormComponent,
+    DoctoresBuscarComponent,
+    DoctoresFormEditComponent,
   ],
   imports: [
     BrowserModule,

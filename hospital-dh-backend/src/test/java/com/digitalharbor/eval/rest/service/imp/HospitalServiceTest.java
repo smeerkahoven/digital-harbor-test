@@ -3,6 +3,8 @@ package com.digitalharbor.eval.rest.service.imp;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.util.List;
+
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +22,7 @@ class HospitalServiceTest {
 	@Autowired
 	private IHospitalService<HospitalDto> service ;
 
-	@Test
+	//@Test
 	void test() {
 		HospitalDto dto = new HospitalDto();
 		dto.setNombre("Hospital Un Paso a la Muerte");
@@ -49,7 +51,7 @@ class HospitalServiceTest {
 		}
 	}
 	
-	@Test
+	//@Test
 	void testUpdate() {
 		HospitalDto dto = new HospitalDto();
 		dto.setId(1);
@@ -60,6 +62,21 @@ class HospitalServiceTest {
 		try {
 			HospitalDto response = service.create(dto);
 			assertThat(response).isNotNull();
+		} catch (HospitalException e) {
+			
+			e.printStackTrace();
+		}
+	}
+	
+	@Test
+	void testSearch() {
+		HospitalDto dto = new HospitalDto();
+		dto.setNombre("Hospital Incor");
+		dto.setPublicId(StaticValues.PUBLIC_ID);
+
+		try {
+			List<HospitalDto> response = service.search(dto);
+			assertThat(response).isNotEmpty();
 		} catch (HospitalException e) {
 			
 			e.printStackTrace();

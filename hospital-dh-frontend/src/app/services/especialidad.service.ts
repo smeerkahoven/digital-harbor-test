@@ -43,7 +43,7 @@ export class EspecialidadService {
   }
 
   get(request: any) {
-    return this.http.get<any>(`${this.path}/${request.user.id}`).pipe(
+    return this.http.get<any>(`${this.path}/${request.id}`).pipe(
       map((response: any) => {
         return response;
       })

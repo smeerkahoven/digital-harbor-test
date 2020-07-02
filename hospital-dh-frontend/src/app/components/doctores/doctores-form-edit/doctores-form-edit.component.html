@@ -1,0 +1,98 @@
+<app-header></app-header>
+<div class="col">
+
+</div>
+<div class="container">
+    <div class="card">
+        <div class="card-body">
+
+            <div class="modal-header">
+                <h4 class="modal-title" id="modal-basic-title">Formulario Doctor</h4>
+              </div>
+              <div class="modal-body">
+                <form #form="ngForm">
+                  <div class="form-group" *ngIf="data.id">
+                    <label for="codigo">Id</label>
+                    <label for="codigo" class="form-control">{{data.id}}</label>
+                  </div>
+              
+                  <div class="form-group">
+                    <label for="nombre">Nombre</label>
+                    <input type="text" class="form-control" name="nombre" placeholder="Nombre" [(ngModel)]="data.nombre" required>
+                  </div>
+              
+                  <div class="form-group">
+                    <label for="nombre">Apellido</label>
+                    <input type="text" class="form-control" name="apellido" placeholder="Apellido" [(ngModel)]="data.apellido"
+                      required>
+                  </div>
+              
+              
+                  <div class="form-group">
+                    <label for="direccion">Direcci&oacute;n</label>
+                    <input type="text" class="form-control" name="direccion" placeholder="Direccion" [(ngModel)]="data.direccion"
+                      required>
+                  </div>
+              
+                  <label for="inputEmail3" class="col-sm-4 col-form-label">Fecha de Nacimiento</label>
+                    <div class="input-group">
+                      <input name="fechaCreacion" class="form-control" placeholder="mm/dd/yyyy" [(ngModel)]="data.fechaNacimiento "
+                        required ngbDatepicker #dp="ngbDatepicker">
+                      <div class="input-group-append">
+                        <button class="btn btn-outline-secondary fa fa-calendar" (click)="dp.toggle()" type="button"></button>
+                      </div>
+                  </div>
+
+                  <div class="form-group">
+                    <label for="direccion">Especialidades</label>
+                    <div class="form-inline">
+                      <select class="form-control col">
+                        <option [value]="item.id"  [(ngModel)]="selectedEspecialidad" 
+                        *ngFor="let item of especialidades"> {{item.nombre}}</option>
+                      </select>
+                      <button class="btn btn-primary" (action)="addEspecialidad()" >Agregar</button>
+                    </div>
+                    
+                  </div>
+
+                 
+                  <table class="table table-striped">
+                    <thead>
+                      <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Nombre</th>
+                        <th scope="col">Descripci&oacute;n</th>
+                        <th scope="col">Fecha Creaci&oacute;n</th>
+                        <th scope="col" ></th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr *ngFor="let especilidad of data.especialidades">
+                        <th scope="row">{{ especilidad.id }}</th>
+                        <td>{{ especilidad.nombre }}</td>
+                        <td>{{ especilidad.descripcion }}</td>
+                        <td>{{ especilidad.fechaCreacion }}</td>
+                        <td>
+                        <div class="btn-group" role="group" aria-label="Basic example">
+                          <button title="Eliminar" class="btn btn-danger btn-sm" (click)="eliminar(especilidad)"><i class="fa fa-trash fa-lg"></i></button>
+                        </div>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+              
+              
+                </form>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-success" (click)="actualizar()">Actualizar</button>
+                <button type="button" class="btn btn-danger" (click)="eliminar()" >Eliminar</button>
+              </div>
+              
+              
+              
+              <hr>
+
+        </div>
+    </div>
+</div>

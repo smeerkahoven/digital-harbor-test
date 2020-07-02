@@ -52,7 +52,7 @@ export class HospitalService {
     
       get(request: any) {
         return this.http
-          .get<any>(`${this.path}/${request.user.id}`)
+          .get<any>(`${this.path}/${request.id}`)
           .pipe(
             map((response: any) => {
               return response ;
@@ -62,7 +62,7 @@ export class HospitalService {
 
       search(request: any) {
         return this.http
-          .post<any>(`${this.path}`, request)
+          .post<any>(`${this.path}/search`, request)
           .pipe(
             map((response: any) => {
               return response ;

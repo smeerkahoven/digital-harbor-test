@@ -28,8 +28,8 @@ public class HospitalService implements IHospitalService<HospitalDto> {
 	private EntityManager em;
 
 	@Autowired
-	private UsuarioRepository usuarioRepository ;
-	
+	private UsuarioRepository usuarioRepository;
+
 	@Autowired
 	private HospitalRepository repository;
 
@@ -121,7 +121,7 @@ public class HospitalService implements IHospitalService<HospitalDto> {
 
 		HospitalDto response = new HospitalDto();
 		BeanUtils.copyProperties(fromDb.get(), response);
-		
+
 		response.setFechaCreacion(DateUtils.convert(fromDb.get().getFechaCreacion()));
 
 		ArrayList<HospitalDto> items = new ArrayList<>();
@@ -140,7 +140,7 @@ public class HospitalService implements IHospitalService<HospitalDto> {
 			HospitalDto toResponse = new HospitalDto();
 			BeanUtils.copyProperties(e, toResponse);
 			toResponse.setFechaCreacion(DateUtils.convert(e.getFechaCreacion()));
-			
+
 			response.add(toResponse);
 		});
 
@@ -160,31 +160,31 @@ public class HospitalService implements IHospitalService<HospitalDto> {
 	@Override
 	public List<HospitalDto> search(HospitalDto dto) throws HospitalException {
 
-		String query = "SELECT h FROM HospitalEntity h WHERE ";
+		String query = "SELECT h.* FROM hospital h WHERE ";
 
 		if (dto.getFechaCreacion() == null && (dto.getNombre() == null || dto.getNombre().trim().length() == 0)) {
 			throw new HospitalException(ExceptionMessages.MSG_VALOR_BUSQUEDA);
 		}
 
 		if (dto.getFechaCreacion() != null) {
-			if(DateUtils.esFechaValida(dto.getFechaCreacion())) {
-				query += " h.fechaCreacion=:fechaCrecion AND ";
+			if (DateUtils.esFechaValida(dto.getFechaCreacion())) {
+				query += " date_format(h.fecha_creacion,'%m/%d/%Y')=:fechaCreacion AND ";
 			}
 		}
 
 		if (dto.getNombre() != null) {
 			if (dto.getNombre().trim().length() > 0) {
-				query += " h.nombre LIKE %:nombre% AND ";
+				query += " h.nombre LIKE CONCAT('%',:nombre,'%') AND ";
 			}
 		}
-		
-		query += " AND 1=1 ";
-		
-		Query q = em.createQuery(query);
-		
+
+		query += " 1=1 ";
+
+		Query q = em.createNativeQuery(query, HospitalEntity.class);
+
 		if (dto.getFechaCreacion() != null) {
-			if(DateUtils.esFechaValida(dto.getFechaCreacion())) {
-				q.setParameter("fechaCreacion", DateUtils.convert(dto.getFechaCreacion()));
+			if (DateUtils.esFechaValida(dto.getFechaCreacion())) {
+				q.setParameter("fechaCreacion", dto.getFechaCreacion());
 			}
 		}
 
@@ -194,21 +194,20 @@ public class HospitalService implements IHospitalService<HospitalDto> {
 			}
 		}
 
-				
-		List<HospitalEntity> list = q.getResultList() ;
-		
-		List<HospitalDto> responseList = new  ArrayList<>();
-		
-		list.forEach(e-> {
+		List<HospitalEntity> list = q.getResultList();
+
+		List<HospitalDto> responseList = new ArrayList<>();
+
+		list.forEach(e -> {
 			HospitalDto fromBd = new HospitalDto();
 			fromBd.setDireccion(e.getDireccion());
 			fromBd.setFechaCreacion(DateUtils.convert(e.getFechaCreacion()));
 			fromBd.setId(e.getId());
 			fromBd.setNombre(e.getNombre());
-			
+
 			responseList.add(fromBd);
 		});
-		
+
 		return responseList;
 	}
 

@@ -43,7 +43,7 @@ export class PacienteService {
   }
 
   get(request: any) {
-    return this.http.get<any>(`${this.path}/${request.user.id}`).pipe(
+    return this.http.get<any>(`${this.path}/${request.id}`).pipe(
       map((response: any) => {
         return response;
       })
@@ -59,7 +59,7 @@ export class PacienteService {
   }
 
   search(request: any) {
-    return this.http.post<any>(`${this.path}`, request).pipe(
+    return this.http.post<any>(`${this.path}/search`, request).pipe(
       map((response: any) => {
         return response;
       })

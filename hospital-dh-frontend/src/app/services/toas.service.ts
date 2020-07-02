@@ -18,7 +18,8 @@ export class ToastService {
   }
 
   showError(msg){
-    this.show(msg, { classname: 'bg-danger text-light', delay: 10000 });
+    //this.show(msg, { classname: 'bg-danger text-light', delay: 10000 });
+    window.alert(msg);
   }
 
 }

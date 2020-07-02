@@ -27,7 +27,7 @@ export class DoctorService {
   }
 
   update(request: any) {
-    return this.http.put<any>(`${this.path}`, request).pipe(
+    return this.http.post<any>(`${this.path}/update`, request).pipe(
       map((response: any) => {
         return response;
       })
@@ -35,7 +35,7 @@ export class DoctorService {
   }
 
   delete(request: any) {
-    return this.http.delete<any>(`${this.path}/${request.user.id}`).pipe(
+    return this.http.post<any>(`${this.path}/delete`, request).pipe(
       map((response: any) => {
         return response;
       })
@@ -43,7 +43,7 @@ export class DoctorService {
   }
 
   get(request: any) {
-    return this.http.get<any>(`${this.path}/${request.user.id}`).pipe(
+    return this.http.get<any>(`${this.path}/${request.id}`).pipe(
       map((response: any) => {
         return response;
       })
@@ -59,7 +59,7 @@ export class DoctorService {
   }
 
   search(request: any) {
-    return this.http.post<any>(`${this.path}`, request).pipe(
+    return this.http.post<any>(`${this.path}/search`, request).pipe(
       map((response: any) => {
         return response;
       })

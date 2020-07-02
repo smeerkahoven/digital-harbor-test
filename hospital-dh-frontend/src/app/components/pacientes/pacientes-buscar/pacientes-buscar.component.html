@@ -1,0 +1,49 @@
+<app-header></app-header>
+
+
+<div class="container">
+    <div class="card">
+        <div class="card-body">
+            <h5 class="card-title">Busqueda de Pacientes</h5>
+            <form #form="ngForm">
+                <div class="form-group row">
+                    <label for="inputEmail3" class="col-sm-1 col-form-label">Nombre</label>
+                    <div class="col-sm">
+                        <input type="text" class="form-control" name="nombre" [(ngModel)]="data.nombre"
+                            placeholder="Nombre">
+                    </div>
+
+                    <label for="inputEmail3" class="col-sm-1 col-form-label">Apellido</label>
+                    <div class="col-sm">
+                        <input type="text" class="form-control" name="apellido" [(ngModel)]="data.apellido"
+                            placeholder="Apellido">
+                    </div>
+
+                    <label for="inputEmail3" class="col-sm-2 col-form-label">Fecha de Nacimiento</label>
+                    <div class="col-sm">
+                        <div class="form-group">
+                            <div class="input-group">
+                                <input name="dateOfBirth" class="form-control" 
+                                    placeholder="mm/dd/yyyy" 
+                                    [(ngModel)]="data.fechaNacimiento " 
+                                    required
+                                    ngbDatepicker #dp="ngbDatepicker">
+                                <div class="input-group-append">
+                                  <button class="btn btn-outline-secondary fa fa-calendar" (click)="dp.toggle()" type="button"></button>
+                                </div>
+                              </div>
+                          </div>
+                    </div>
+
+                    <button class="btn btn-primary" (click)="buscar()">Buscar</button>
+                </div>
+            </form>
+        </div>
+
+        <div class="container" *ngIf="btnBuscarSubmited">
+            <app-pacientes [btnDisabled]="btnDisable" [data]="searchData"></app-pacientes>
+        </div>
+
+    </div>
+
+</div>

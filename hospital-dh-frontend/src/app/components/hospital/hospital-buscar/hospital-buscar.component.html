@@ -1,0 +1,39 @@
+<app-header></app-header>
+
+
+<div class="container">
+    <div class="card">
+        <div class="card-body">
+            <h5 class="card-title">Busqueda de Hospitales</h5>
+            <form #form="ngForm">
+                <div class="form-group row">
+                    <label for="inputEmail3" class="col-sm-1 col-form-label">Nombre</label>
+                    <div class="col-sm">
+                        <input type="email" class="form-control" name="nombre" [(ngModel)]="data.nombre"
+                            placeholder="Nombre">
+                    </div>
+
+                    <label for="inputEmail3" class="col-sm-2 col-form-label">Fecha de Creacion</label>
+                    <div class="col-sm">
+                        <div class="input-group">
+                            <input name="fechaCreacion" class="form-control" placeholder="mm/dd/yyyy"
+                                [(ngModel)]="data.fechaCreacion " required ngbDatepicker #dp="ngbDatepicker">
+                            <div class="input-group-append">
+                                <button class="btn btn-outline-secondary fa fa-calendar" (click)="dp.toggle()"
+                                    type="button"></button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button class="btn btn-primary" (click)="buscar()">Buscar</button>
+                </div>
+            </form>
+        </div>
+
+        <div class="container" *ngIf="btnBuscarSubmited">
+            <app-hospital [btnDisabled]="btnDisable" [data]="searchData"></app-hospital>
+        </div>
+
+    </div>
+
+</div>

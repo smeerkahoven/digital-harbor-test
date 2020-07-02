@@ -54,17 +54,18 @@ public class DoctorService implements IDoctorService<DoctorDto> {
 
 			entity.setHospitalId(hospitalId);
 
-			if (!dto.getEspecialidades().isEmpty()) {
-				List<EspecialidadEntity> el = new ArrayList<>();
-				dto.getEspecialidades().forEach(e -> {
-					EspecialidadEntity etoDb = new EspecialidadEntity();
-					
-					etoDb.setId(e.getId());
+			if (dto.getEspecialidades() != null)
+				if (!dto.getEspecialidades().isEmpty()) {
+					List<EspecialidadEntity> el = new ArrayList<>();
+					dto.getEspecialidades().forEach(e -> {
+						EspecialidadEntity etoDb = new EspecialidadEntity();
 
-					el.add(etoDb);
-				});
-				entity.setEspecialidades(el);
-			}
+						etoDb.setId(e.getId());
+
+						el.add(etoDb);
+					});
+					entity.setEspecialidades(el);
+				}
 
 			DoctorEntity response = repository.save(entity);
 
@@ -192,6 +193,8 @@ public class DoctorService implements IDoctorService<DoctorDto> {
 		DoctorDto response = new DoctorDto();
 		BeanUtils.copyProperties(fromDb.get(), response);
 
+		response.setFechaNacimiento(DateUtils.convert(fromDb.get().getFechaNacimiento()));
+
 		if (!fromDb.get().getEspecialidades().isEmpty()) {
 
 			List<EspecialidadDto> especialidades = new ArrayList<>();
@@ -201,13 +204,14 @@ public class DoctorService implements IDoctorService<DoctorDto> {
 				EspecialidadDto espFromDb = new EspecialidadDto();
 				espFromDb.setDescripcion(e.getDescripcion());
 				espFromDb.setFechaCreacion(DateUtils.convert(e.getFechaCreacion()));
+
 				espFromDb.setId(e.getId());
 				espFromDb.setNombre(e.getNombre());
 				// TODO
 				// espFromDb.setAvatar(e.getAvatar());
 				especialidades.add(espFromDb);
 			});
-			
+
 			response.setEspecialidades(especialidades);
 
 		}
@@ -229,10 +233,9 @@ public class DoctorService implements IDoctorService<DoctorDto> {
 
 		HospitalEntity hospital = new HospitalEntity();
 		hospital.setId(id);
-		
+
 		List<DoctorEntity> fromDb = repository.findByHospitalId(hospital);
 
-		
 		List<DoctorDto> response = new ArrayList<>();
 
 		fromDb.forEach(e -> {
@@ -288,33 +291,33 @@ public class DoctorService implements IDoctorService<DoctorDto> {
 			throw new HospitalException(ExceptionMessages.MSG_VALOR_BUSQUEDA);
 		}
 
-		if (dto.getFechaNacimiento() != null || DateUtils.esFechaValida(dto.getFechaNacimiento())) {
-				query += " h.fechaNacimiento=:fechaNacimiento AND ";
+		if (dto.getFechaNacimiento() != null && DateUtils.esFechaValida(dto.getFechaNacimiento())) {
+			query += " date_format(h.fecha_nacimiento,'%m/%d/%Y')=:fechaNacimiento AND ";
 		}
 
-		if (dto.getNombre() != null || dto.getNombre().trim().length() > 0) {
-				query += " h.nombre LIKE CONCAT('%',:nombre,'%') AND ";
+		if (dto.getNombre() != null && dto.getNombre().trim().length() > 0) {
+			query += " h.nombre LIKE CONCAT('%',:nombre,'%') AND ";
 		}
 
-		if (dto.getApellido() != null || dto.getApellido().trim().length() > 0) {
-				query += " h.apellido LIKE CONCAT('%',:apellido,'%') AND ";
+		if (dto.getApellido() != null && dto.getApellido().trim().length() > 0) {
+			query += " h.apellido LIKE CONCAT('%',:apellido,'%') AND ";
 		}
 
 		query += " 1=1 ";
 
-		Query q = em.createQuery(query, DoctorEntity.class);
+		Query q = em.createNativeQuery(query, DoctorEntity.class);
 
-		if (dto.getFechaNacimiento() != null || DateUtils.esFechaValida(dto.getFechaNacimiento()) ) {
-				q.setParameter("fechaNacimiento", DateUtils.convert(dto.getFechaNacimiento()));
-			
+		if (dto.getFechaNacimiento() != null && DateUtils.esFechaValida(dto.getFechaNacimiento())) {
+			q.setParameter("fechaNacimiento", dto.getFechaNacimiento());
+
 		}
 
-		if (dto.getNombre() != null  ||dto.getNombre().trim().length() > 0) {
-				q.setParameter("nombre", dto.getNombre());
+		if (dto.getNombre() != null && dto.getNombre().trim().length() > 0) {
+			q.setParameter("nombre", dto.getNombre());
 		}
 
-		if (dto.getApellido() != null || (dto.getApellido().trim().length() > 0) ) {
-				q.setParameter("apellido", dto.getApellido());
+		if (dto.getApellido() != null && (dto.getApellido().trim().length() > 0)) {
+			q.setParameter("apellido", dto.getApellido());
 		}
 
 		List<DoctorEntity> list = q.getResultList();
@@ -331,7 +334,7 @@ public class DoctorService implements IDoctorService<DoctorDto> {
 			fromBd.setId(e.getId());
 			fromBd.setNombre(e.getNombre());
 			fromBd.setFechaCreacion(DateUtils.convert(e.getFechaCreacion()));
-			
+
 			HospitalDto hospital = new HospitalDto();
 			hospital.setId(e.getHospitalId().getId());
 			hospital.setNombre(e.getNombre());

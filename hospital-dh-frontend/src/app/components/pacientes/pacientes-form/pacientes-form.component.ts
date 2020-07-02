@@ -18,11 +18,6 @@ import { PacienteService } from 'src/app/services/paciente.service';
 })
 export class PacientesFormComponent implements OnInit {
 
-  get today() {
-    return this.dateAdapter.toModel(this.ngbCalendar.getToday())!;
-  }
-
-  model1: string;
 
   @Input() data;
   @Input() metodo;

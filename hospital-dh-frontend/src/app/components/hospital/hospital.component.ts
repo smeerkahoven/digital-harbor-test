@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 import { HospitalFormComponent } from './hospital-form/hospital-form.component';
 import { HospitalService } from 'src/app/services/hospital.service';
@@ -7,6 +7,7 @@ import { Config } from 'src/app/config';
 import { Hospital } from 'src/model/hospital.model';
 import { CodeResponse } from 'src/model/response/code.response';
 import { ToastService } from 'src/app/services/toas.service';
+import { Router, ActivatedRoute } from '@angular/router';
 
 
 
@@ -17,11 +18,19 @@ import { ToastService } from 'src/app/services/toas.service';
 })
 export class HospitalComponent implements OnInit {
 
+
+  @Input()
   data: Hospital[] = [];
 
   page = 1;
   pageSize = 4;
   collectionSize = this.data.length;
+
+  @Input()
+  btnDisabled : boolean ;
+
+  @Input()
+  loadMain : boolean ;
 
 
   get tableData(): Hospital[] {
@@ -32,11 +41,20 @@ export class HospitalComponent implements OnInit {
 
   constructor(private modalService: NgbModal, 
               private service : HospitalService,
-              public toastService: ToastService
+              public toastService: ToastService,
+              private router: Router, 
+               private route: ActivatedRoute
     ) { }
 
   ngOnInit(): void {
-    this.getAll();
+    if (this.loadMain){
+      this.getAll();
+    }
+  }
+
+  setData(data) {
+    this.data = data ;
+    this.collectionSize = this.data.length ;
   }
 
   getAll () {
@@ -60,7 +78,9 @@ export class HospitalComponent implements OnInit {
       console.log(result);
 
       if (result != 'close') {
-        this.getAll() ;
+        if (this.loadMain){
+          this.getAll() ;
+        }
       }
 
     })
@@ -75,10 +95,15 @@ export class HospitalComponent implements OnInit {
       console.log(result);
 
       if (result != 'close') {
-        this.getAll() ;
+        if (this.loadMain){
+          this.getAll() ;
+        }
       }
-
     })
+  }
+
+  buscar () {
+    this.router.navigate(['/buscar/hospital'],{relativeTo: this.route});
   }
 
 
@@ -89,7 +114,9 @@ export class HospitalComponent implements OnInit {
       
       if (response.codigo == CodeResponse.RESPONSE_OK ){
         this.toastService.showSucces("Registro Eliminado");
-        this.getAll() ;
+        if (this.loadMain){
+          this.getAll() ;
+        }
       }else {
         this.toastService.showError(response.mensaje);
       }

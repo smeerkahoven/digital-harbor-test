@@ -34,12 +34,19 @@ export class EspecialidadComponent implements OnInit , OnChanges {
       .subscribe((response:any)=>{
         this.data = response.items ;
         this.hospital = newVal ;
-        this.collectionSize = this.data.length ;
+
+        if(this.data != undefined) {
+          this.collectionSize = this.data.length ;
+        }
+        
       })
 
   }
 
   get tableData(): Especialidad[] {
+    if (this.data == undefined)
+      this.data = [] ;
+
     return this.data
       .map((paciente, i) => ({id: i + 1, ...paciente}))
       .slice((this.page - 1) * this.pageSize, (this.page - 1) * this.pageSize + this.pageSize);

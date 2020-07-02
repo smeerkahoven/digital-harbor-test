@@ -24,7 +24,7 @@ class PacienteServiceTest {
 	@Autowired
 	private IPacienteService<PacienteDto> service;
 
-	@Test
+	//@Test
 	void testCreate() {
 
 		PacienteDto dto = new PacienteDto();
@@ -75,7 +75,7 @@ class PacienteServiceTest {
 		}
 	}
 	
-	@Test
+	//@Test
 	void testFindByHospital() {
 		
 		try {
@@ -90,7 +90,7 @@ class PacienteServiceTest {
 		
 	}
 
-	@Test
+	//@Test
 	void testUpdate() {
 
 		PacienteDto dto = new PacienteDto();
@@ -147,7 +147,7 @@ class PacienteServiceTest {
 		 * dto.setFechaNacimiento("01/01/2010");
 		 */
 		dto.setNombre("Marcelo");
-		dto.setPublicId("G1mm5Tnjs6hKz47l");
+		dto.setPublicId(StaticValues.PUBLIC_ID);
 
 		try {
 
@@ -171,7 +171,7 @@ class PacienteServiceTest {
 		 * dto.setFechaNacimiento("01/01/2010");
 		 */
 		// dto.setNombre("Marcelo");
-		dto.setPublicId("G1mm5Tnjs6hKz47l");
+		dto.setPublicId(StaticValues.PUBLIC_ID);
 		dto.setFechaNacimiento("10/09/1984");
 
 		try {

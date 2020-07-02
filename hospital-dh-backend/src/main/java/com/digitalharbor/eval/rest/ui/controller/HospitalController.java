@@ -192,7 +192,7 @@ public class HospitalController {
 		return response;
 	}
 	
-	@PostMapping("/buscar")
+	@PostMapping("/search")
 	public HospitalResponse buscar(@RequestHeader(name ="publicId",required =true) String publicId ,
 			@RequestBody final HospitalRequest request) {
 		

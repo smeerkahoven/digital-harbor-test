@@ -3,8 +3,13 @@ import { Observable } from 'rxjs';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { DoctorService } from 'src/app/services/doctor.service';
 import { HospitalService } from 'src/app/services/hospital.service';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { first } from 'rxjs/operators';
+import { Doctor } from 'src/model/doctor.model';
+import { ToastService } from 'src/app/services/toas.service';
+import { Config } from 'src/app/config';
+import { CodeResponse } from 'src/model/response/code.response';
+import { DoctoresFormComponent } from './doctores-form/doctores-form.component';
 
 @Component({
   selector: 'app-doctores',
@@ -13,41 +18,20 @@ import { first } from 'rxjs/operators';
 })
 export class DoctoresComponent implements OnInit , OnChanges {
   @Input('hospital')
-  //hospital: BehaviorSubject<any> = new BehaviorSubject(null);
   hospital : any;
 
-  
-  mySubscription: any;
+  data: Doctor[] = [];
 
-  public _hospital: Observable<number>;
+  page = 1;
+  pageSize = 4;
+  collectionSize = this.data.length;
 
-  //public currentUser : Observable<LoginResponse> ;
+  @Input()
+  btnDisabled : boolean ;
 
-  data = [];
+  @Input()
+  loadMain : boolean ;
 
-  constructor(
-    private modalService: NgbModal,
-    private service: DoctorService,
-    private hospitalService : HospitalService,
-    private router: Router
-  ) {
-
-    /*
-    this.router.routeReuseStrategy.shouldReuseRoute = function () {
-      return false;
-    };
-    this.mySubscription = this.router.events.subscribe((event) => {
-      if (event instanceof NavigationEnd) {
-        this.router.navigated = false;
-        this.getData();
-      }
-    });*/
-
-    /*this.hospital.subscribe(e => {
-      console.log('hola');
-    })*/
-
-  }
   ngOnChanges(changes: SimpleChanges): void {
     let newVal = changes['hospital'].currentValue ;
 
@@ -56,35 +40,72 @@ export class DoctoresComponent implements OnInit , OnChanges {
       .pipe(first())
       .subscribe((response:any)=>{
         this.data = response.items ;
+        this.hospital = newVal ;
+
+        if (this.data!= undefined){
+          this.collectionSize = this.data.length ;
+        }
       })
 
   }
 
-/*
-  getData() {
-     this.service
-      .getPacientesByHospital(this.hospitalService.getSharedData())
-      .pipe(first())
-      .subscribe((response:any)=>{
-        this.data = response.items ;
-       // return this.data ;
-      })
+  get tableData(): Doctor[] {
+    if (this.data == undefined){
+      this.data = [] ;
+    }
+
+    return this.data
+      .map((paciente, i) => ({id: i + 1, ...paciente}))
+      .slice((this.page - 1) * this.pageSize, (this.page - 1) * this.pageSize + this.pageSize);
   }
-*/
+
+  constructor(private modalService: NgbModal, 
+              private service : DoctorService,
+              public toastService: ToastService,
+              private router : Router, 
+              private route : ActivatedRoute,
+              
+    ) { }
+
   ngOnInit(): void {
   }
 
-  ngOnDestroy() {
-    if (this.mySubscription) {
-      this.mySubscription.unsubscribe();
+  getAll(){
+    if (this.loadMain) {
+      this.service
+      .getPacientesByHospital(this.hospital)
+      .pipe(first())
+      .subscribe((response:any)=>{
+        this.data = response.items ;
+        this.collectionSize = this.data.length ;
+      });
     }
+  
   }
+
 
   edit(data) {
-    //const modalRef = this.modalService.open(HospitalFormComponent);
-    //modalRef.componentInstance.data = data;
+    this.router.navigate([`/doctor/edit/${data.id}`],{relativeTo: this.route});
   }
 
-  delete(data) {}
+  nuevo(){
+    this.router.navigate([`/doctor/new/${this.hospital}`],{relativeTo: this.route});  }
+
+
+  delete(data){
+    this.service.delete(data)
+    .pipe(first())
+    .subscribe((response:any)=>{
+      
+      if (response.codigo == CodeResponse.RESPONSE_OK ){
+        this.toastService.showSucces("Registro Eliminado");
+        this.getAll() ;
+      }else {
+        this.toastService.showError(response.mensaje);
+      }
+      
+    })
+    
+  }
 }
 
